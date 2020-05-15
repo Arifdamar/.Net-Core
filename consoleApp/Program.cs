@@ -3,64 +3,84 @@ using System.Linq;
 
 namespace consoleApp
 {
-
-    class Person
-    {
-        string _name;
-
-        public string Name
-        {
-            get {
-                return _name;
-            }
-            set {
-                if(value.Length>15)
-                    throw new Exception("Length must be less than 15 charaters");
-                _name = value;
-            }
-        }
-    }
-
     class Program
     {
-
-        static void check_password(string password)
-        {
-            if(password.Length < 8 || password.Length > 15)
-            {
-                throw new Exception("Password must be beetween 7-15 characters");
-            }
-            if(!password.Any(char.IsDigit))
-            {
-                throw new Exception("Password must contain at least 1 digit");
-            }
-            if(!password.Any(char.IsLetter))
-            {
-                throw new Exception("Password must contain at least 1 letter");
-            }
-        }
-
         static void Main(string[] args)
         {
-            
-            // Exception handling
 
-            // string password = "";
+            // "1","2","5a","10b","abc","10","50"
+            // 1- Liste içerisindeki sayısal değerleri bulunuz.
 
-            // try
-            // {
-            //     check_password(password);
-            //     System.Console.WriteLine("Password is valid.");
-            // }
-            // catch (Exception ex)
-            // {
-            //     System.Console.WriteLine(ex.Message);
-            // }
+            //    var liste = new List<string>()
+            //    {
+            //        "1","2","5a","10b","abc","10","50"
+            //    };
 
+            //    foreach (var item in liste)
+            //    {
+            //        try
+            //        {                       
+            //             int a = int.Parse(item);
+            //             Console.WriteLine(a);
+            //        }
+            //        catch (Exception)
+            //        {
+            //            continue;
+            //        }
+            //    }
 
-            var p = new Person();
-            p.Name = "ArifArifArifArif";
+            // 2- Kullanıcı 'q' değerini girmedikçe aldığınız her değerin
+            // sayısal olup olmadığını kontrol edin aksi halde hata mesajı veriniz.
 
+            //    while(true)
+            //    {
+            //        Console.Write("sayı: ");
+            //        string input = Console.ReadLine();
+
+            //        if (input == "q")
+            //             break;
+
+            //         try
+            //         {
+            //             int sayi = int.Parse(input);
+            //             Console.WriteLine("girdiğiniz sayı: {0}",sayi);
+            //         }
+            //         catch (Exception)
+            //         {
+            //             Console.WriteLine("geçersiz sayı");
+            //             continue;
+            //         }             
+
+            //    }
+
+            // 3- Girilen parola içinde türkçe karakter araması yapınız.  
+
+            Console.Write("parola: ");
+            string parola = Console.ReadLine();
+
+            try
+            {
+                CheckPassword(parola);
+            }
+            catch (Exception ex)
+            {
+                Console.Write(ex.Message);
+            }
         }
+
+        static void CheckPassword(string parola)
+        {
+            string turkce_karakterler = "ğ,Ğ,ç,Ç,ş,Ş,ü,Ü,ö,Ö,ı,İ";
+
+            foreach (var karakter in parola)
+            {
+                if (turkce_karakterler.IndexOf(karakter) > -1)
+                    throw new Exception("Parola türkçe karakter içeremez");
+            }
+            Console.Write("geçerli parola");
+        }
+
+
     }
+
 }

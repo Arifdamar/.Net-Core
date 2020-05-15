@@ -1,60 +1,65 @@
 ﻿using System;
+using System.Linq;
 
 namespace consoleApp
 {
 
-    class Product
+    class Person
     {
-        public string Name { get; set; }
+        string _name;
+
+        public string Name
+        {
+            get {
+                return _name;
+            }
+            set {
+                if(value.Length>15)
+                    throw new Exception("Length must be less than 15 charaters");
+                _name = value;
+            }
+        }
     }
 
     class Program
     {
+
+        static void check_password(string password)
+        {
+            if(password.Length < 8 || password.Length > 15)
+            {
+                throw new Exception("Password must be beetween 7-15 characters");
+            }
+            if(!password.Any(char.IsDigit))
+            {
+                throw new Exception("Password must contain at least 1 digit");
+            }
+            if(!password.Any(char.IsLetter))
+            {
+                throw new Exception("Password must contain at least 1 letter");
+            }
+        }
+
         static void Main(string[] args)
         {
-            // Exception
-
-            // System.FormatException
-            // System.DivideByZeroException
-            // System.IndexOutOfRangeException
-            // System.NullReferenceException            
-
-
+            
             // Exception handling
 
-            try
-            {
+            // string password = "";
 
-                Console.Write("a: ");
-                int a = int.Parse(Console.ReadLine());
+            // try
+            // {
+            //     check_password(password);
+            //     System.Console.WriteLine("Password is valid.");
+            // }
+            // catch (Exception ex)
+            // {
+            //     System.Console.WriteLine(ex.Message);
+            // }
 
-                Console.Write("b: ");
-                int b = int.Parse(Console.ReadLine());
 
-                var result = a / b;
-
-                Console.WriteLine("{0} / {1} = {2}", a, b, result);
-            }
-            catch (DivideByZeroException ex)
-            {
-                Console.WriteLine("Second number cannot be 0");
-                System.Console.WriteLine(ex.Message);
-            }
-            catch(FormatException ex)
-            {
-                Console.WriteLine("Invalid format");
-                System.Console.WriteLine(ex.Message);
-            }
-            catch(Exception ex)
-            {
-                System.Console.WriteLine("An error occured");
-                System.Console.WriteLine(ex.Message);
-            }
-            finally
-            {
-                System.Console.WriteLine("Finally works!");
-            }
-
+            var p = new Person();
+            p.Name = "ArifArifArifArif";
 
         }
     }

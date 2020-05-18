@@ -252,7 +252,28 @@ namespace DatabaseExercise
 
         public void Delete(int productId)
         {
-            throw new NotImplementedException();
+            using (var connection = GetMsSqlConnection())
+            {
+                try
+                {
+                    connection.Open();
+
+                    string sql = "delete from products where ProductID=@productId";
+
+                    SqlCommand command = new SqlCommand(sql, connection);
+                    command.Parameters.AddWithValue("@productId", productId);
+
+                    command.ExecuteNonQuery();
+                }
+                catch (Exception e)
+                {
+                    System.Console.WriteLine(e.Message);
+                }
+                finally
+                {
+                    connection.Close();
+                }
+            }
         }
 
         public List<Product> GetAllProducts()
@@ -301,7 +322,7 @@ namespace DatabaseExercise
 
         public Product GetProductById(int id)
         {
-            
+
             Product product = null;
 
             using (var connection = GetMsSqlConnection())
@@ -404,7 +425,7 @@ namespace DatabaseExercise
 
         public void Delete(int productId)
         {
-            throw new NotImplementedException();
+            _productDal.Delete(productId);
         }
 
         public List<Product> Find(string productName)
@@ -435,12 +456,7 @@ namespace DatabaseExercise
 
             var productDal = new ProductManager(new MsSQLProductDal());
 
-            var product = productDal.GetProductById(79);
-
-            product.Name = "Updated product name";
-            product.Price = 2000;
-
-            productDal.Update(product);
+            productDal.Delete(79);
 
         }
 

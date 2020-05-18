@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Data.SqlClient;
 using MySql.Data.MySqlClient;
 
@@ -222,7 +223,30 @@ namespace DatabaseExercise
         }
         public void Create(Product product)
         {
-            throw new NotImplementedException();
+            using (var connection = GetMsSqlConnection())
+            {
+                try
+                {
+                    connection.Open();
+
+                    string sql = "insert into products (ProductName,UnitPrice,Discontinued) VALUES (@productname,@unitprice,@discontinued)";
+
+                    SqlCommand command = new SqlCommand(sql, connection);
+                    command.Parameters.AddWithValue("@productName", product.Name);
+                    command.Parameters.AddWithValue("@unitPrice", product.Price);
+                    command.Parameters.AddWithValue("@discontinued", 0);
+
+                    int result = command.ExecuteNonQuery();
+                }
+                catch (Exception e)
+                {
+                    System.Console.WriteLine(e.Message);
+                }
+                finally
+                {
+                    connection.Close();
+                }
+            }
         }
 
         public void Delete(int productId)
@@ -311,7 +335,7 @@ namespace DatabaseExercise
 
         public void Create(Product product)
         {
-            throw new NotImplementedException();
+            _productDal.Create(product);
         }
 
         public void Delete(int productId)
@@ -345,10 +369,13 @@ namespace DatabaseExercise
         static void Main(string[] args)
         {
 
-            var productDal = new ProductManager(new MySQLProductDal());
+            var productDal = new ProductManager(new MsSQLProductDal());
 
-            int count = productDal.Count();
-            System.Console.WriteLine($"Total products: {count}");
+            productDal.Create(new Product()
+            {
+                Name = "Arif Damar's product",
+                Price = 10000
+            });
 
         }
 

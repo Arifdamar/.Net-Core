@@ -1,20 +1,29 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Data.SqlClient;
 using MySql.Data.MySqlClient;
 
 namespace DatabaseExercise
 {
+
     class Program
     {
         static void Main(string[] args)
         {
 
-            GetAllProducts();
+            var products = GetAllProducts();
+
+            foreach (var product in products)
+            {
+                System.Console.WriteLine($"id: {product.ProductId} name: {product.Name} price: {product.Price}");
+            }
 
         }
 
-        static void GetAllProducts()
+        static List<Product> GetAllProducts()
         {
+            List<Product> products = null;
+
             using (var connection = GetMySqlConnection())
             {
                 try
@@ -27,13 +36,20 @@ namespace DatabaseExercise
 
                     MySqlDataReader reader = command.ExecuteReader();
 
+                    products = new List<Product>();
+
                     while (reader.Read())
                     {
-                        Console.WriteLine($"name: {reader[3]} price: {reader[6]}");
+                        products.Add(new Product
+                        {
+                            ProductId = int.Parse(reader["id"].ToString()),
+                            Name = reader["product_name"].ToString(),
+                            Price = double.Parse(reader["list_price"]?.ToString())
+                        });
+
                     }
 
                     reader.Close();
-
                 }
                 catch (Exception e)
                 {
@@ -43,8 +59,9 @@ namespace DatabaseExercise
                 {
                     connection.Close();
                 }
-
             }
+
+            return products;
         }
 
         static void GetSqlConnection()

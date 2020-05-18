@@ -10,6 +10,7 @@ namespace DatabaseExercise
     {
         List<Product> GetAllProducts();
         Product GetProductById(int id);
+        List<Product> Find(string productName);
         void Create(Product product);
         void Update(Product product);
         void Delete(int productId);
@@ -82,12 +83,94 @@ namespace DatabaseExercise
 
         public Product GetProductById(int id)
         {
-            throw new NotImplementedException();
+            Product product = null;
+
+            using (var connection = GetMySqlConnection())
+            {
+                try
+                {
+                    connection.Open();
+
+                    string sql = "select * from products where id=@ProductId";
+
+                    MySqlCommand command = new MySqlCommand(sql, connection);
+                    command.Parameters.Add("ProductId", MySqlDbType.Int32).Value = id;
+
+                    MySqlDataReader reader = command.ExecuteReader();
+
+                    reader.Read();
+                    if (reader.HasRows)
+                    {
+                        product = new Product()
+                        {
+                            ProductId = int.Parse(reader["id"].ToString()),
+                            Name = reader["product_name"].ToString(),
+                            Price = double.Parse(reader["list_price"]?.ToString())
+                        };
+                    }
+
+                    reader.Close();
+                }
+                catch (Exception e)
+                {
+                    System.Console.WriteLine(e.Message);
+                }
+                finally
+                {
+                    connection.Close();
+                }
+            }
+
+            return product;
         }
 
         public void Update(Product product)
         {
             throw new NotImplementedException();
+        }
+
+        public List<Product> Find(string productName)
+        {
+            List<Product> products = null;
+
+            using (var connection = GetMySqlConnection())
+            {
+                try
+                {
+                    connection.Open();
+
+                    string sql = "select * from products where product_name LIKE @productName";
+
+                    MySqlCommand command = new MySqlCommand(sql, connection);
+                    command.Parameters.Add("@productName", MySqlDbType.String).Value = "%" + productName + "%";
+
+                    MySqlDataReader reader = command.ExecuteReader();
+
+                    products = new List<Product>();
+
+                    while (reader.Read())
+                    {
+                        products.Add(new Product
+                        {
+                            ProductId = int.Parse(reader["id"].ToString()),
+                            Name = reader["product_name"].ToString(),
+                            Price = double.Parse(reader["list_price"]?.ToString())
+                        });
+                    }
+
+                    reader.Close();
+                }
+                catch (Exception e)
+                {
+                    System.Console.WriteLine(e.Message);
+                }
+                finally
+                {
+                    connection.Close();
+                }
+            }
+
+            return products;
         }
     }
 
@@ -164,6 +247,11 @@ namespace DatabaseExercise
         {
             throw new NotImplementedException();
         }
+
+        public List<Product> Find(string productName)
+        {
+            throw new NotImplementedException();
+        }
     }
 
     public class ProductManager : IProductDal
@@ -184,6 +272,11 @@ namespace DatabaseExercise
             throw new NotImplementedException();
         }
 
+        public List<Product> Find(string productName)
+        {
+            return _productDal.Find(productName);
+        }
+
         public List<Product> GetAllProducts()
         {
             return _productDal.GetAllProducts();
@@ -191,7 +284,7 @@ namespace DatabaseExercise
 
         public Product GetProductById(int id)
         {
-            throw new NotImplementedException();
+            return _productDal.GetProductById(id);
         }
 
         public void Update(Product product)
@@ -205,13 +298,17 @@ namespace DatabaseExercise
         static void Main(string[] args)
         {
 
-            var productDal = new ProductManager(new MsSQLProductDal());
+            var productDal = new ProductManager(new MySQLProductDal());
 
-            var products = productDal.GetAllProducts();
+            var product = productDal.GetProductById(6);
 
-            foreach (var product in products)
+            System.Console.WriteLine($"id: {product.ProductId} name: {product.Name} price: {product.Price}");
+
+            var products = productDal.Find("Olive");
+
+            foreach (var prd in products)
             {
-                System.Console.WriteLine($"id: {product.ProductId} name: {product.Name} price: {product.Price}");
+                System.Console.WriteLine($"id: {prd.ProductId} name: {prd.Name} price: {prd.Price}");
             }
 
         }

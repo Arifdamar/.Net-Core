@@ -9,12 +9,45 @@ namespace DatabaseExercise
         static void Main(string[] args)
         {
 
-            //GetSqlConnection();
-            GetMySqlConnection();
+            GetAllProducts();
 
         }
 
-        static void GetMySqlConnection()
+        static void GetAllProducts()
+        {
+            using (var connection = GetMySqlConnection())
+            {
+                try
+                {
+                    connection.Open();
+
+                    string sql = "select * from products";
+
+                    MySqlCommand command = new MySqlCommand(sql, connection);
+
+                    MySqlDataReader reader = command.ExecuteReader();
+
+                    while (reader.Read())
+                    {
+                        Console.WriteLine($"name: {reader[3]} price: {reader[6]}");
+                    }
+
+                    reader.Close();
+
+                }
+                catch (Exception e)
+                {
+                    System.Console.WriteLine(e.Message);
+                }
+                finally
+                {
+                    connection.Close();
+                }
+
+            }
+        }
+
+        static void GetSqlConnection()
         {
 
             string connectionString = @"Data Source=.\SQLEXPRESS;Initial Catalog=Northwind;Integrated Security=SSPI;";
@@ -42,31 +75,13 @@ namespace DatabaseExercise
 
         }
 
-        static void GetSqlConnection()
+        static MySqlConnection GetMySqlConnection()
         {
             string connectionString = @"server=localhost;port=3306;database=northwind;user=root;password=123456789;";
 
             // driver, provider
 
-            using (var connection = new MySqlConnection(connectionString))
-            {
-                try
-                {
-                    connection.Open();
-                    System.Console.WriteLine("Connection Successful");
-                }
-                catch (Exception e)
-                {
-                    System.Console.WriteLine(e.Message);
-                }
-                finally
-                {
-                    connection.Close();
-                }
-
-            }
-
-
+            return new MySqlConnection(connectionString);
         }
 
     }

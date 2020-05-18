@@ -247,6 +247,7 @@ namespace DatabaseExercise
                     connection.Close();
                 }
             }
+
         }
 
         public void Delete(int productId)
@@ -300,12 +301,75 @@ namespace DatabaseExercise
 
         public Product GetProductById(int id)
         {
-            throw new NotImplementedException();
+            
+            Product product = null;
+
+            using (var connection = GetMsSqlConnection())
+            {
+                try
+                {
+                    connection.Open();
+
+                    string sql = "select * from products where ProductID=@ProductId";
+
+                    SqlCommand command = new SqlCommand(sql, connection);
+                    command.Parameters.AddWithValue("@ProductId", id);
+
+                    SqlDataReader reader = command.ExecuteReader();
+
+                    reader.Read();
+                    if (reader.HasRows)
+                    {
+                        product = new Product()
+                        {
+                            ProductId = int.Parse(reader["ProductID"].ToString()),
+                            Name = reader["ProductName"].ToString(),
+                            Price = double.Parse(reader["UnitPrice"]?.ToString())
+                        };
+                    }
+
+                    reader.Close();
+                }
+                catch (Exception e)
+                {
+                    System.Console.WriteLine(e.Message);
+                }
+                finally
+                {
+                    connection.Close();
+                }
+            }
+
+            return product;
         }
 
         public void Update(Product product)
         {
-            throw new NotImplementedException();
+            using (var connection = GetMsSqlConnection())
+            {
+                try
+                {
+                    connection.Open();
+
+                    string sql = "update products set ProductName=@productName,UnitPrice=@unitPrice where ProductId=@productId";
+
+                    SqlCommand command = new SqlCommand(sql, connection);
+                    command.Parameters.AddWithValue("@productName", product.Name);
+                    command.Parameters.AddWithValue("@unitPrice", product.Price);
+                    command.Parameters.AddWithValue("@productId", product.ProductId);
+
+                    command.ExecuteNonQuery();
+                }
+                catch (Exception e)
+                {
+                    System.Console.WriteLine(e.Message);
+                }
+                finally
+                {
+                    connection.Close();
+                }
+            }
+
         }
 
         public List<Product> Find(string productName)
@@ -360,7 +424,7 @@ namespace DatabaseExercise
 
         public void Update(Product product)
         {
-            throw new NotImplementedException();
+            _productDal.Update(product);
         }
     }
 
@@ -371,11 +435,12 @@ namespace DatabaseExercise
 
             var productDal = new ProductManager(new MsSQLProductDal());
 
-            productDal.Create(new Product()
-            {
-                Name = "Arif Damar's product",
-                Price = 10000
-            });
+            var product = productDal.GetProductById(79);
+
+            product.Name = "Updated product name";
+            product.Price = 2000;
+
+            productDal.Update(product);
 
         }
 

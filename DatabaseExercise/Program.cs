@@ -11,6 +11,7 @@ namespace DatabaseExercise
         List<Product> GetAllProducts();
         Product GetProductById(int id);
         List<Product> Find(string productName);
+        int Count();
         void Create(Product product);
         void Update(Product product);
         void Delete(int productId);
@@ -172,6 +173,41 @@ namespace DatabaseExercise
 
             return products;
         }
+
+        public int Count()
+        {
+            int count = 0;
+
+            using (var connection = GetMySqlConnection())
+            {
+                try
+                {
+                    connection.Open();
+
+                    string sql = "select count(*) from products";
+
+                    MySqlCommand command = new MySqlCommand(sql, connection);
+
+                    object result = command.ExecuteScalar();
+
+                    if (result != null)
+                    {
+                        count = Convert.ToInt32(result.ToString());
+                    }
+
+                }
+                catch (Exception e)
+                {
+                    System.Console.WriteLine(e.Message);
+                }
+                finally
+                {
+                    connection.Close();
+                }
+            }
+
+            return count;
+        }
     }
 
     public class MsSQLProductDal : IProductDal
@@ -252,6 +288,11 @@ namespace DatabaseExercise
         {
             throw new NotImplementedException();
         }
+
+        public int Count()
+        {
+            throw new NotImplementedException();
+        }
     }
 
     public class ProductManager : IProductDal
@@ -262,6 +303,12 @@ namespace DatabaseExercise
         {
             _productDal = productDal;
         }
+
+        public int Count()
+        {
+            return _productDal.Count();
+        }
+
         public void Create(Product product)
         {
             throw new NotImplementedException();
@@ -300,16 +347,8 @@ namespace DatabaseExercise
 
             var productDal = new ProductManager(new MySQLProductDal());
 
-            var product = productDal.GetProductById(6);
-
-            System.Console.WriteLine($"id: {product.ProductId} name: {product.Name} price: {product.Price}");
-
-            var products = productDal.Find("Olive");
-
-            foreach (var prd in products)
-            {
-                System.Console.WriteLine($"id: {prd.ProductId} name: {prd.Name} price: {prd.Price}");
-            }
+            int count = productDal.Count();
+            System.Console.WriteLine($"Total products: {count}");
 
         }
 

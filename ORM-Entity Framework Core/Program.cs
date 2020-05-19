@@ -43,9 +43,41 @@ namespace ORM_Entity_Framework_Core
     {
         static void Main(string[] args)
         {
-            GetProductsByName("S10");
+            UpdateProduct();
         }
-        
+
+        static void UpdateProduct()
+        {
+            using (var db = new ShopContext())
+            {
+                var p = db.Products.Where(i => i.Id ==1).FirstOrDefault();
+
+                if(p != null)
+                {
+                    p.Price *= 1.2m;
+
+                    db.Products.Update(p);
+                    db.SaveChanges();
+                }
+
+
+
+                // var p = db
+                // .Products
+                // .Where(i => i.Id == 1)
+                // .FirstOrDefault();
+
+                // if (p != null)
+                // {
+                //     p.Price *= 1.2m;
+
+                //     db.SaveChanges();
+
+                //     Console.WriteLine("Updated");
+                // }
+            }
+        }
+
         static void GetProductsByName(string name)
         {
             using (var context = new ShopContext())
@@ -54,10 +86,10 @@ namespace ORM_Entity_Framework_Core
                                 .Products
                                 .Where(p => p.Name.ToLower().Contains(name.ToLower()))
                                 .Select(p => new
-                                        {
-                                            p.Name,
-                                            p.Price
-                                        })
+                                {
+                                    p.Name,
+                                    p.Price
+                                })
                                 .ToList();
 
                 foreach (var p in products)
@@ -66,7 +98,6 @@ namespace ORM_Entity_Framework_Core
                 }
             }
         }
-
         static void GetProductById(int id)
         {
             using (var context = new ShopContext())
@@ -75,10 +106,10 @@ namespace ORM_Entity_Framework_Core
                                 .Products
                                 .Where(p => p.Id == id)
                                 .Select(p => new
-                                        {
-                                            p.Name,
-                                            p.Price
-                                        })
+                                {
+                                    p.Name,
+                                    p.Price
+                                })
                                 .FirstOrDefault();
 
                 if (product != null)

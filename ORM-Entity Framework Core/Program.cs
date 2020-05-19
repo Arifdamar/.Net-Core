@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.Linq;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 
@@ -42,9 +43,70 @@ namespace ORM_Entity_Framework_Core
     {
         static void Main(string[] args)
         {
-            AddProduct();
+            GetProductsByName("S10");
+        }
+        
+        static void GetProductsByName(string name)
+        {
+            using (var context = new ShopContext())
+            {
+                var products = context
+                                .Products
+                                .Where(p => p.Name.ToLower().Contains(name.ToLower()))
+                                .Select(p => new
+                                        {
+                                            p.Name,
+                                            p.Price
+                                        })
+                                .ToList();
+
+                foreach (var p in products)
+                {
+                    Console.WriteLine($"name: {p.Name}, price: {p.Price}");
+                }
+            }
         }
 
+        static void GetProductById(int id)
+        {
+            using (var context = new ShopContext())
+            {
+                var product = context
+                                .Products
+                                .Where(p => p.Id == id)
+                                .Select(p => new
+                                        {
+                                            p.Name,
+                                            p.Price
+                                        })
+                                .FirstOrDefault();
+
+                if (product != null)
+                {
+                    Console.WriteLine($"name: {product.Name}, price: {product.Price}");
+                }
+            }
+        }
+        static void GetAllProducts()
+        {
+            using (var context = new ShopContext())
+            {
+                var products = context
+                .Products
+                .Select(product => new
+                {
+                    product.Name,
+                    product.Price
+                })
+                .ToList();
+
+                foreach (var p in products)
+                {
+                    Console.WriteLine($"name: {p.Name}, price: {p.Price}");
+                }
+
+            }
+        }
         static void AddProducts()
         {
             using (var db = new ShopContext())

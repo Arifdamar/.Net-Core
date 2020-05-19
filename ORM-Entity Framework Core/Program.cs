@@ -43,16 +43,38 @@ namespace ORM_Entity_Framework_Core
     {
         static void Main(string[] args)
         {
-            UpdateProduct();
+            DeleteProduct(1);
         }
 
+        static void DeleteProduct(int id)
+        {
+            using (var db = new ShopContext())
+            {
+                var p = new Product(){Id = id};
+
+                // db.Products.Remove(p);
+                db.Entry(p).State = EntityState.Deleted;
+
+                db.SaveChanges();
+
+                // var p = db.Products.FirstOrDefault(i => i.Id == id);
+
+                // if(p != null)
+                // {
+                //     db.Products.Remove(p);
+                //     db.SaveChanges();
+
+                //     System.Console.WriteLine("Data deleted successfully");
+                // }
+            }
+        }
         static void UpdateProduct()
         {
             using (var db = new ShopContext())
             {
-                var p = db.Products.Where(i => i.Id ==1).FirstOrDefault();
+                var p = db.Products.Where(i => i.Id == 1).FirstOrDefault();
 
-                if(p != null)
+                if (p != null)
                 {
                     p.Price *= 1.2m;
 
@@ -77,7 +99,6 @@ namespace ORM_Entity_Framework_Core
                 // }
             }
         }
-
         static void GetProductsByName(string name)
         {
             using (var context = new ShopContext())
@@ -161,7 +182,6 @@ namespace ORM_Entity_Framework_Core
             }
 
         }
-
         static void AddProduct()
         {
             using (var db = new ShopContext())

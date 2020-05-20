@@ -19,7 +19,8 @@ namespace ORM_Entity_Framework_Core
         {
             optionsBuilder
             .UseLoggerFactory(MyLoggerFactory)
-            .UseSqlite("Data Source=shop.db");
+            //.UseSqlite("Data Source=shop.db");
+            .UseSqlServer(@"Data Source=.\SQLEXPRESS; Initial Catalog=ShopDb; Integrated Security=SSPI;");
         }
     }
 
@@ -43,7 +44,7 @@ namespace ORM_Entity_Framework_Core
     {
         static void Main(string[] args)
         {
-            DeleteProduct(1);
+            AddProducts();
         }
 
         static void DeleteProduct(int id)

@@ -25,6 +25,22 @@ namespace ORM_Entity_Framework_Core
             //.UseSqlite("Data Source=shop.db");
             .UseSqlServer(@"Data Source=.\SQLEXPRESS; Initial Catalog=ShopDb; Integrated Security=SSPI;");
         }
+
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<ProductCategory>()
+                        .HasKey(t => new { t.ProductId, t.CategoryId });
+
+            modelBuilder.Entity<ProductCategory>()
+                        .HasOne(pc => pc.Product)
+                        .WithMany(p => p.ProductCategories)
+                        .HasForeignKey(pc => pc.ProductId);
+
+            modelBuilder.Entity<ProductCategory>()
+                        .HasOne(pc => pc.Category)
+                        .WithMany(c => c.ProductCategories)
+                        .HasForeignKey(pc => pc.CategoryId);
+        }
     }
 
     public class User
@@ -74,51 +90,63 @@ namespace ORM_Entity_Framework_Core
     public class Product
     {
         public int Id { get; set; }
-
-        [MaxLength(100)]
-        [Required]
         public string Name { get; set; }
         public decimal Price { get; set; }
-        public int CategoryId { get; set; }
+
+        public List<ProductCategory> ProductCategories { get; set; }
     }
 
     public class Category
     {
         public int Id { get; set; }
         public string Name { get; set; }
+
+        public List<ProductCategory> ProductCategories { get; set; }
+    }
+
+    public class ProductCategory
+    {
+        public int ProductId { get; set; }
+        public Product Product { get; set; }
+
+        public int CategoryId { get; set; }
+        public Category Category { get; set; }
     }
 
     class Program
     {
         static void Main(string[] args)
         {
-
             using (var db = new ShopContext())
             {
-                // var customer = new Customer()
-                // {
-                //     IdentityNumber = "11111111111",
-                //     FirstName = "Arif",
-                //     LastName = "Damar",
-                //     // UserId = 1 or
-                //     User = db.Users.FirstOrDefault(i => i.Id == 2)
-                // };
-                // db.Customers.Add(customer);
-                // db.SaveChanges();
-
-                var user = new User()
+                var products = new List<Product>()
                 {
-                    Username = "test",
-                    Email = "test@example.com",
-                    Customer = new Customer() 
-                    { 
-                        FirstName = "testName",
-                        LastName = "testLastName",
-                        IdentityNumber = "ttttttttttt"
-                    }
+                    new Product() { Name = "Apple IPhone X", Price = 8000 },
+                    new Product() { Name = "Apple IPhone 11", Price = 13000 },
+                    new Product() { Name = "Apple IPhone 11 PRO", Price = 15000 }
                 };
 
-                db.Users.Add(user);
+                // db.Products.AddRange(products);
+
+                var categories = new List<Category>()
+                {
+                    new Category() { Name = "Phone"},
+                    new Category() { Name = "Electronics"},
+                    new Category() { Name = "Computer"}
+                };
+
+                // db.Categories.AddRange(categories);
+
+                int[] ids = new int[2]{1,2};
+
+                var p = db.Products.Find(1);
+
+                p.ProductCategories = ids.Select(categoryId => new ProductCategory()
+                {
+                    CategoryId = categoryId,
+                    ProductId = p.Id
+                }).ToList();
+
                 db.SaveChanges();
             }
         }

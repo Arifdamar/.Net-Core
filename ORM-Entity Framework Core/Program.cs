@@ -11,7 +11,8 @@ namespace ORM_Entity_Framework_Core
     {
         public DbSet<Product> Products { get; set; }
         public DbSet<Category> Categories { get; set; }
-        public DbSet<Order> Orders { get; set; }
+        public DbSet<User> Users { get; set; }
+        public DbSet<Address> Addresses { get; set; }
 
         public static readonly ILoggerFactory MyLoggerFactory
         = LoggerFactory.Create(builder => { builder.AddConsole(); });
@@ -23,6 +24,30 @@ namespace ORM_Entity_Framework_Core
             //.UseSqlite("Data Source=shop.db");
             .UseSqlServer(@"Data Source=.\SQLEXPRESS; Initial Catalog=ShopDb; Integrated Security=SSPI;");
         }
+    }
+
+    public class User
+    {
+        public User()
+        {
+            this.Addresses = new List<Address>();
+        }
+        public int Id { get; set; }
+        public string Username { get; set; }
+        public string Email { get; set; }
+
+        public List<Address> Addresses { get; set; } // navigation property
+    }
+
+    public class Address
+    {
+        public int Id { get; set; }
+        public string FullName { get; set; }
+        public string Title { get; set; }
+        public string Body { get; set; }
+
+        public User User { get; set; } // navigation property
+        public int UserId { get; set; }
     }
 
     public class Product
@@ -42,170 +67,63 @@ namespace ORM_Entity_Framework_Core
         public string Name { get; set; }
     }
 
-    public class Order
-    {
-        public int Id { get; set; }
-        public int ProductId { get; set; }
-        public DateTime Date { get; set; }
-    }
-
     class Program
     {
         static void Main(string[] args)
         {
-            AddProducts();
-        }
+            // InsertUsers();
+            // InsertAddresses();
 
-        static void DeleteProduct(int id)
-        {
             using (var db = new ShopContext())
             {
-                var p = new Product(){Id = id};
+                var user = db.Users.FirstOrDefault(i => i.Username == "arifDamar");
 
-                // db.Products.Remove(p);
-                db.Entry(p).State = EntityState.Deleted;
-
-                db.SaveChanges();
-
-                // var p = db.Products.FirstOrDefault(i => i.Id == id);
-
-                // if(p != null)
-                // {
-                //     db.Products.Remove(p);
-                //     db.SaveChanges();
-
-                //     System.Console.WriteLine("Data deleted successfully");
-                // }
-            }
-        }
-        static void UpdateProduct()
-        {
-            using (var db = new ShopContext())
-            {
-                var p = db.Products.Where(i => i.Id == 1).FirstOrDefault();
-
-                if (p != null)
+                if (user != null)
                 {
-                    p.Price *= 1.2m;
-
-                    db.Products.Update(p);
+                    user.Addresses.AddRange(
+                        new List<Address>()
+                        {
+                            new Address() { FullName = "Arif Damar", Title = "Home Address", Body = "Can/Canakkale/Turkey" },
+                            new Address() { FullName = "Arif Damar", Title = "Job Address", Body = "Istanbul/Turkey" },
+                            new Address() { FullName = "Arif Damar", Title = "School Address", Body = "Serdivan/Sakarya/Turkey" }
+                        }
+                    );
                     db.SaveChanges();
                 }
-
-
-
-                // var p = db
-                // .Products
-                // .Where(i => i.Id == 1)
-                // .FirstOrDefault();
-
-                // if (p != null)
-                // {
-                //     p.Price *= 1.2m;
-
-                //     db.SaveChanges();
-
-                //     Console.WriteLine("Updated");
-                // }
             }
         }
-        static void GetProductsByName(string name)
+
+        static void InsertUsers()
         {
-            using (var context = new ShopContext())
+            var users = new List<User>()
             {
-                var products = context
-                                .Products
-                                .Where(p => p.Name.ToLower().Contains(name.ToLower()))
-                                .Select(p => new
-                                {
-                                    p.Name,
-                                    p.Price
-                                })
-                                .ToList();
+                new User(){Username = "arifDamar", Email = "arif660damar@gmail.com"},
+                new User(){Username = "arifDamar1", Email = "arif660damar1@gmail.com"},
+                new User(){Username = "arifDamar2", Email = "arif660damar2@gmail.com"},
+                new User(){Username = "arifDamar3", Email = "arif660damar3@gmail.com"}
+            };
 
-                foreach (var p in products)
-                {
-                    Console.WriteLine($"name: {p.Name}, price: {p.Price}");
-                }
-            }
-        }
-        static void GetProductById(int id)
-        {
-            using (var context = new ShopContext())
-            {
-                var product = context
-                                .Products
-                                .Where(p => p.Id == id)
-                                .Select(p => new
-                                {
-                                    p.Name,
-                                    p.Price
-                                })
-                                .FirstOrDefault();
-
-                if (product != null)
-                {
-                    Console.WriteLine($"name: {product.Name}, price: {product.Price}");
-                }
-            }
-        }
-        static void GetAllProducts()
-        {
-            using (var context = new ShopContext())
-            {
-                var products = context
-                .Products
-                .Select(product => new
-                {
-                    product.Name,
-                    product.Price
-                })
-                .ToList();
-
-                foreach (var p in products)
-                {
-                    Console.WriteLine($"name: {p.Name}, price: {p.Price}");
-                }
-
-            }
-        }
-        static void AddProducts()
-        {
             using (var db = new ShopContext())
             {
-                var products = new List<Product>
-                {
-                    new Product { Name = "Samsung Galaxy S8", Price = 4000 },
-                    new Product { Name = "Samsung Galaxy S8+", Price = 4500 },
-                    new Product { Name = "Samsung Galaxy S9", Price = 5000 },
-                    new Product { Name = "Samsung Galaxy S9+", Price = 5500 },
-                    new Product { Name = "Samsung Galaxy S10", Price = 6000 },
-                    new Product { Name = "Samsung Galaxy S10+", Price = 6500 }
-                };
-
-                db.Products.AddRange(products);
-
+                db.Users.AddRange(users);
                 db.SaveChanges();
-
-                System.Console.WriteLine("Datas added to database");
-
             }
-
         }
-        static void AddProduct()
+        static void InsertAddresses()
         {
+            var addresses = new List<Address>()
+            {
+                new Address(){FullName = "Arif Damar", Title = "Home Address", Body = "Can/Canakkale/Turkey", UserId = 1},
+                new Address(){FullName = "Arif Damar", Title = "Job Address", Body = "Can/Canakkale/Turkey", UserId = 1},
+                new Address(){FullName = "Arif Damar1", Title = "Home Address", Body = "Can/Canakkale/Turkey", UserId = 2},
+                new Address(){FullName = "Arif Damar2", Title = "Home Address", Body = "Can/Canakkale/Turkey", UserId = 3}
+            };
+
             using (var db = new ShopContext())
             {
-                var p = new Product { Name = "Samsung Galaxy S8", Price = 4000 };
-
-                db.Products.Add(p);
-
+                db.Addresses.AddRange(addresses);
                 db.SaveChanges();
-
-                System.Console.WriteLine("Data added to database");
-
             }
         }
-
     }
 }

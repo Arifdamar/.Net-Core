@@ -11,6 +11,7 @@ namespace ORM_Entity_Framework_Core
     {
         public DbSet<Product> Products { get; set; }
         public DbSet<Category> Categories { get; set; }
+        public DbSet<Order> Orders { get; set; }
 
         public static readonly ILoggerFactory MyLoggerFactory
         = LoggerFactory.Create(builder => { builder.AddConsole(); });
@@ -32,12 +33,20 @@ namespace ORM_Entity_Framework_Core
         [Required]
         public string Name { get; set; }
         public decimal Price { get; set; }
+        public int CategoryId { get; set; }
     }
 
     public class Category
     {
         public int Id { get; set; }
         public string Name { get; set; }
+    }
+
+    public class Order
+    {
+        public int Id { get; set; }
+        public int ProductId { get; set; }
+        public DateTime Date { get; set; }
     }
 
     class Program

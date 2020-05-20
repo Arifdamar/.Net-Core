@@ -12,6 +12,7 @@ namespace ORM_Entity_Framework_Core
         public DbSet<Product> Products { get; set; }
         public DbSet<Category> Categories { get; set; }
         public DbSet<User> Users { get; set; }
+        public DbSet<Customer> Customers { get; set; }
         public DbSet<Address> Addresses { get; set; }
 
         public static readonly ILoggerFactory MyLoggerFactory
@@ -36,7 +37,27 @@ namespace ORM_Entity_Framework_Core
         public string Username { get; set; }
         public string Email { get; set; }
 
+        public Customer Customer { get; set; }
+
         public List<Address> Addresses { get; set; } // navigation property
+    }
+
+    public class Customer
+    {
+        public int Id { get; set; }
+        public string IdentityNumber { get; set; }
+        public string FirstName { get; set; }
+        public string LastName { get; set; }
+
+        public User User { get; set; }
+        public int UserId { get; set; }
+    }
+
+    public class Supplier
+    {
+        public int Id { get; set; }
+        public string Name { get; set; }
+        public string TaxNumber { get; set; }
     }
 
     public class Address
@@ -71,25 +92,34 @@ namespace ORM_Entity_Framework_Core
     {
         static void Main(string[] args)
         {
-            // InsertUsers();
-            // InsertAddresses();
 
             using (var db = new ShopContext())
             {
-                var user = db.Users.FirstOrDefault(i => i.Username == "arifDamar");
+                // var customer = new Customer()
+                // {
+                //     IdentityNumber = "11111111111",
+                //     FirstName = "Arif",
+                //     LastName = "Damar",
+                //     // UserId = 1 or
+                //     User = db.Users.FirstOrDefault(i => i.Id == 2)
+                // };
+                // db.Customers.Add(customer);
+                // db.SaveChanges();
 
-                if (user != null)
+                var user = new User()
                 {
-                    user.Addresses.AddRange(
-                        new List<Address>()
-                        {
-                            new Address() { FullName = "Arif Damar", Title = "Home Address", Body = "Can/Canakkale/Turkey" },
-                            new Address() { FullName = "Arif Damar", Title = "Job Address", Body = "Istanbul/Turkey" },
-                            new Address() { FullName = "Arif Damar", Title = "School Address", Body = "Serdivan/Sakarya/Turkey" }
-                        }
-                    );
-                    db.SaveChanges();
-                }
+                    Username = "test",
+                    Email = "test@example.com",
+                    Customer = new Customer() 
+                    { 
+                        FirstName = "testName",
+                        LastName = "testLastName",
+                        IdentityNumber = "ttttttttttt"
+                    }
+                };
+
+                db.Users.Add(user);
+                db.SaveChanges();
             }
         }
 

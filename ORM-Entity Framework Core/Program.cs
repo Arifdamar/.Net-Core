@@ -5,6 +5,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
+using ORM_Entity_Framework_Core.Data.EfCore;
 
 namespace ORM_Entity_Framework_Core
 {
@@ -77,7 +78,7 @@ namespace ORM_Entity_Framework_Core
                         _context.Categories.AddRange(categories);
                     }
                 }
-                
+
                 context.SaveChanges();
             }
         }
@@ -189,7 +190,18 @@ namespace ORM_Entity_Framework_Core
     {
         static void Main(string[] args)
         {
-            DataSeeding.Seed(new ShopContext());
+            // DataSeeding.Seed(new ShopContext());
+
+            using( var db = new NorthwindContext())
+            {
+                var products = db.Products.ToList();
+
+                foreach (var product in products)
+                {
+                    System.Console.WriteLine(product.ProductName);
+                }
+            }
+
         }
 
         static void InsertUsers()

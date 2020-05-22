@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
@@ -23,11 +24,21 @@ namespace ORM_Entity_Framework_Core
             optionsBuilder
             .UseLoggerFactory(MyLoggerFactory)
             //.UseSqlite("Data Source=shop.db");
-            .UseSqlServer(@"Data Source=.\SQLEXPRESS; Initial Catalog=ShopDb; Integrated Security=SSPI;");
+            //.UseSqlServer(@"Data Source=.\SQLEXPRESS; Initial Catalog=ShopDb; Integrated Security=SSPI;");
+            .UseMySql(@"server=localhost;port=3306;database=ShopDb;user=root;password=123456789");
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            modelBuilder.Entity<User>()
+                        .HasIndex(u => u.Username)
+                        .IsUnique();
+
+            modelBuilder.Entity<Customer>()
+                        .Property(p => p.IdentityNumber)
+                        .HasMaxLength(11)
+                        .IsRequired();
+
             modelBuilder.Entity<ProductCategory>()
                         .HasKey(t => new { t.ProductId, t.CategoryId });
 
@@ -50,7 +61,12 @@ namespace ORM_Entity_Framework_Core
             this.Addresses = new List<Address>();
         }
         public int Id { get; set; }
+
+        [Required]
+        [MinLength(5), MaxLength(20)]
         public string Username { get; set; }
+
+        [Column(TypeName = "varchar(20)")]
         public string Email { get; set; }
 
         public Customer Customer { get; set; }
@@ -62,8 +78,13 @@ namespace ORM_Entity_Framework_Core
     {
         public int Id { get; set; }
         public string IdentityNumber { get; set; }
+        [Required]
         public string FirstName { get; set; }
+        [Required]
         public string LastName { get; set; }
+
+        [NotMapped]
+        public string FullName { get; set; }
 
         public User User { get; set; }
         public int UserId { get; set; }
@@ -93,6 +114,12 @@ namespace ORM_Entity_Framework_Core
         public string Name { get; set; }
         public decimal Price { get; set; }
 
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+        public DateTime CreatedDate { get; set; } = DateTime.Now;
+
+        [DatabaseGenerated(DatabaseGeneratedOption.Computed)]
+        public DateTime LastUpdatedDate { get; set; } = DateTime.Now;
+
         public List<ProductCategory> ProductCategories { get; set; }
     }
 
@@ -119,33 +146,15 @@ namespace ORM_Entity_Framework_Core
         {
             using (var db = new ShopContext())
             {
-                var products = new List<Product>()
-                {
-                    new Product() { Name = "Apple IPhone X", Price = 8000 },
-                    new Product() { Name = "Apple IPhone 11", Price = 13000 },
-                    new Product() { Name = "Apple IPhone 11 PRO", Price = 15000 }
-                };
+                // var p = new Product()
+                // {
+                //     Name = "Samsung Galaxy S10",
+                //     Price = 6000
+                // };
 
-                // db.Products.AddRange(products);
+                var p = db.Products.FirstOrDefault();
 
-                var categories = new List<Category>()
-                {
-                    new Category() { Name = "Phone"},
-                    new Category() { Name = "Electronics"},
-                    new Category() { Name = "Computer"}
-                };
-
-                // db.Categories.AddRange(categories);
-
-                int[] ids = new int[2]{1,2};
-
-                var p = db.Products.Find(1);
-
-                p.ProductCategories = ids.Select(categoryId => new ProductCategory()
-                {
-                    CategoryId = categoryId,
-                    ProductId = p.Id
-                }).ToList();
+                p.Name = "Samsung Galaxy S10+";
 
                 db.SaveChanges();
             }

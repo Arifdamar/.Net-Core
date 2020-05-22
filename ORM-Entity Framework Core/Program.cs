@@ -54,6 +54,51 @@ namespace ORM_Entity_Framework_Core
         }
     }
 
+    public static class DataSeeding
+    {
+        public static void Seed(DbContext context)
+        {
+            if (context.Database.GetPendingMigrations().Count() == 0)
+            {
+                // ShopContext
+                if (context is ShopContext)
+                {
+                    ShopContext _context = context as ShopContext;
+
+                    if (_context.Products.Count() == 0)
+                    {
+                        // add products
+                        _context.Products.AddRange(products);
+                    }
+
+                    if (_context.Categories.Count() == 0)
+                    {
+                        // add categories
+                        _context.Categories.AddRange(categories);
+                    }
+                }
+                
+                context.SaveChanges();
+            }
+        }
+
+        private static Product[] products =
+        {
+            new Product(){Name = "Samsung Galaxy S8", Price =4000},
+            new Product(){Name = "Samsung Galaxy S8+", Price =4500},
+            new Product(){Name = "Samsung Galaxy S9", Price =5000},
+            new Product(){Name = "Samsung Galaxy S9+", Price =5500},
+            new Product(){Name = "Samsung Galaxy S10", Price =6000},
+            new Product(){Name = "Samsung Galaxy S10+", Price =6500}
+        };
+        private static Category[] categories =
+        {
+            new Category(){Name = "Phone"},
+            new Category(){Name = "Electronics"},
+            new Category(){Name = "Computer"}
+        };
+    }
+
     public class User
     {
         public User()
@@ -144,20 +189,7 @@ namespace ORM_Entity_Framework_Core
     {
         static void Main(string[] args)
         {
-            using (var db = new ShopContext())
-            {
-                // var p = new Product()
-                // {
-                //     Name = "Samsung Galaxy S10",
-                //     Price = 6000
-                // };
-
-                var p = db.Products.FirstOrDefault();
-
-                p.Name = "Samsung Galaxy S10+";
-
-                db.SaveChanges();
-            }
+            DataSeeding.Seed(new ShopContext());
         }
 
         static void InsertUsers()

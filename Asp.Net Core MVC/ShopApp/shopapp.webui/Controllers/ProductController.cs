@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
+using shopapp.webui.Models;
 
 namespace shopapp.webui.Controllers
 {
@@ -19,7 +20,13 @@ namespace shopapp.webui.Controllers
         // localhost:5000/product/details
         public IActionResult Details(int id)
         {
-            return View();
+            
+            var p = new Product();
+            p.Name = "Samsung Galaxy S9";
+            p.Price = 5000;
+            p.Description = "Good phone";
+
+            return View(p);
         }
     }
 }

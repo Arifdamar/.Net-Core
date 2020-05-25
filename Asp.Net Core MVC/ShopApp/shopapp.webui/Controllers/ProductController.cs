@@ -6,20 +6,20 @@ namespace shopapp.webui.Controllers
     {
         
         // localhost:5000/product/index
-        public string Index()
+        public IActionResult Index()
         {
-            return "Product/Index";
+            return View();
         }
         // localhost:5000/product/list
-        public string List()
+        public IActionResult List()
         {
-            return "Product/List";
+            return View();
         }
 
         // localhost:5000/product/details
-        public string Details(int id)
+        public IActionResult Details(int id)
         {
-            return "Product/Details/" + id;
+            return View();
         }
     }
 }

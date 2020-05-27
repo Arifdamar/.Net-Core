@@ -1,5 +1,7 @@
+using System.Collections.Generic;
 using Microsoft.AspNetCore.Mvc;
 using shopapp.webui.Models;
+using shopapp.webui.ViewModels;
 
 namespace shopapp.webui.Controllers
 {
@@ -24,7 +26,33 @@ namespace shopapp.webui.Controllers
         // localhost:5000/product/list
         public IActionResult List()
         {
-            return View();
+            var products = new List<Product>()
+            {
+                new Product 
+                {
+                    Name = "Samsung Galaxy S9",
+                    Price = 6000,
+                    Description = "Good Phone"
+                },
+                new Product 
+                {
+                    Name = "Samsung Galaxy S9+",
+                    Price = 6500,
+                    Description = "Better Phone"
+                }
+            };
+
+            var productViewModel = new ProductViewModel() 
+            {
+                Products = products,
+                Category = new Category() 
+                        {
+                            Name = "Phones",
+                            Description="All phones"
+                        }
+            };
+
+            return View(productViewModel);
         }
 
         // localhost:5000/product/details

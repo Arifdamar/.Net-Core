@@ -1,3 +1,4 @@
+@model shopapp.webui.ViewModels.ProductViewModel
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -6,6 +7,30 @@
     <title>Product</title>
 </head>
 <body>
-    <h1>Product/List</h1>
+    <h2>@Model.Category.Name</h2>
+    <h3>@Model.Category.Description</h3>
+    <div>
+        <p>
+            @Model.Products[0].Name
+        </p>
+        <p>
+            @Model.Products[0].Price
+        </p>
+        <p>
+            @Model.Products[0].Description
+        </p>
+    </div>
+
+    <div>
+        <p>
+            @Model.Products[1].Name
+        </p>
+        <p>
+            @Model.Products[1].Price
+        </p>
+        <p>
+            @Model.Products[1].Description
+        </p>
+    </div>
 </body>
 </html>

@@ -1,36 +1,52 @@
 @model shopapp.webui.ViewModels.ProductViewModel
+
+@{
+    var products = Model.Products.Where(p => p.IsApproved == true).ToList();
+    var popularClass = products.Count > 2 ? "popular" : "";
+}
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Product</title>
+    <style>
+        .popular {
+            color: green;
+            font-weight: 700;
+        }
+    </style>
 </head>
 <body>
-    <h2>@Model.Category.Name</h2>
+    <h1 class = "@popularClass">@Model.Category.Name</h1>
     <h3>@Model.Category.Description</h3>
-    <div>
-        <p>
-            @Model.Products[0].Name
-        </p>
-        <p>
-            @Model.Products[0].Price
-        </p>
-        <p>
-            @Model.Products[0].Description
-        </p>
-    </div>
 
-    <div>
-        <p>
-            @Model.Products[1].Name
-        </p>
-        <p>
-            @Model.Products[1].Price
-        </p>
-        <p>
-            @Model.Products[1].Description
-        </p>
-    </div>
+    @if(products.Count == 0)
+    {
+        <p style="background-color: red;">No products found!</p>
+    }
+    else
+    {
+        <ul>
+            @foreach (var product in products)
+            {
+                <li>
+                    <div>
+                        <p>
+                            @product.Name
+                        </p>
+                        <p>
+                            @product.Price
+                        </p>
+                        <p>
+                            @product.Description
+                        </p>
+                    </div>
+                </li>
+            }
+        </ul>
+    }
+
 </body>
 </html>

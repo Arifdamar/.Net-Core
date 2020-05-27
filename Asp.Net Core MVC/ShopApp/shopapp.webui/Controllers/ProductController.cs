@@ -28,28 +28,55 @@ namespace shopapp.webui.Controllers
         {
             var products = new List<Product>()
             {
-                new Product 
+                new Product
                 {
                     Name = "Samsung Galaxy S9",
                     Price = 6000,
-                    Description = "Good Phone"
+                    Description = "Good Phone",
+                    IsApproved = true
                 },
-                new Product 
+                new Product
                 {
                     Name = "Samsung Galaxy S9+",
                     Price = 6500,
                     Description = "Better Phone"
+                },
+                new Product
+                {
+                    Name = "Samsung Galaxy S8",
+                    Price = 5000,
+                    Description = "Better Phone"
+                },
+                new Product
+                {
+                    Name = "Samsung Galaxy S8+",
+                    Price = 5500,
+                    Description = "Better Phone",
+                    IsApproved = true
+                },
+                new Product
+                {
+                    Name = "Samsung Galaxy S10+",
+                    Price = 7500,
+                    Description = "Better Phone",
+                    IsApproved = true
+                },
+                new Product
+                {
+                    Name = "Samsung Galaxy S10",
+                    Price = 7000,
+                    Description = "Better Phone"
                 }
             };
 
-            var productViewModel = new ProductViewModel() 
+            var productViewModel = new ProductViewModel()
             {
                 Products = products,
-                Category = new Category() 
-                        {
-                            Name = "Phones",
-                            Description="All phones"
-                        }
+                Category = new Category()
+                {
+                    Name = "Phones",
+                    Description = "All phones"
+                }
             };
 
             return View(productViewModel);

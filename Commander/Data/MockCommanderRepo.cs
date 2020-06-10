@@ -17,7 +17,7 @@ namespace Commander.Data
             return commands;
         }
 
-        public Command GetCommandById()
+        public Command GetCommandById(int id)
         {
             return new Command { Id = 1, HowTo = "Boil an egg", Line = "Boil water", Platform = "Kettle & Pan" };
         }

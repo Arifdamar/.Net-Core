@@ -7,11 +7,12 @@ using Microsoft.EntityFrameworkCore;
 
 namespace IdentityExample.Context
 {
-    public class IdentityContext : IdentityDbContext
+    public class IdentityContext : IdentityDbContext<AppUser,AppRole,int>
     {
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            optionsBuilder.UseSqlServer("database=(localdb)\\MSSQLLocalDB;database=Identity;integrated security=true;");
+            optionsBuilder.UseSqlServer("database=.;database=IdentityExample;integrated security=true;");
         }
+
     }
 }

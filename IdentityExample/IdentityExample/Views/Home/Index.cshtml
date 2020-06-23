@@ -1,0 +1,27 @@
+﻿@model UserSignInViewModel
+@{
+    Layout = null;
+}
+
+<!doctype html>
+
+<html lang="en">
+<head>
+    <meta name="viewport" content="width=device-width">
+    <link href="~/lib/twitter-bootstrap/css/bootstrap.min.css" rel="stylesheet" />
+    <title>Index</title>
+</head>
+<body>
+<form class="w-50 mx-auto p-4 mt-3 shadow" asp-action="SignIn">
+    <h4 class="text-center lead font-weight-bold">Sign In</h4>
+    <div class="form-group">
+        <input asp-for="UserName" class="form-control"/>
+    </div>
+    <div class="form-group">
+        <input asp-for="Password" class="form-control"/>
+    </div>
+    <input type="submit" class="btn btn-primary" value="Sign In"/>
+    <small><a asp-action="Register" class="btn btn-link">Register</a></small>
+</form>
+</body>
+</html>

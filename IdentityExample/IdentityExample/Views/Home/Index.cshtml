@@ -3,25 +3,40 @@
     Layout = null;
 }
 
-<!doctype html>
+<!DOCTYPE html>
 
-<html lang="en">
+<html>
 <head>
-    <meta name="viewport" content="width=device-width">
-    <link href="~/lib/twitter-bootstrap/css/bootstrap.min.css" rel="stylesheet" />
+    <meta name="viewport" content="width=device-width" />
     <title>Index</title>
+    <link href="~/lib/twitter-bootstrap/css/bootstrap.min.css" rel="stylesheet" />
 </head>
 <body>
-<form class="w-50 mx-auto p-4 mt-3 shadow" asp-action="SignIn">
-    <h4 class="text-center lead font-weight-bold">Sign In</h4>
+    
+<form class="w-50 mx-auto p-4 mt-3 shadow" asp-action="SignIn" method="post">
+    <h4 class="text-center lead">Giriş Yap</h4>
     <div class="form-group">
-        <input asp-for="UserName" class="form-control"/>
+        <label asp-for="@Model.UserName"></label>
+        <span asp-validation-for="@Model.UserName" class="text-danger"></span>
+        <input asp-for="@Model.UserName" class="form-control" />
     </div>
     <div class="form-group">
-        <input asp-for="Password" class="form-control"/>
+        <label asp-for="@Model.Password"></label>
+        <span asp-validation-for="@Model.Password" class="text-danger"></span>
+        <input asp-for="@Model.Password" class="form-control" />
     </div>
-    <input type="submit" class="btn btn-primary" value="Sign In"/>
-    <small><a asp-action="Register" class="btn btn-link">Register</a></small>
+
+    <div class="form-check">
+        <input type="checkbox" asp-for="@Model.RememberMe" class="form-check-input"/>
+        <label asp-for="@Model.RememberMe" class="form-check-label">Beni Hatırla</label>
+    </div>
+    <div class="text-danger" asp-validation-summary="ModelOnly">
+
+    </div>
+
+    <input type="submit" class="btn btn-primary" value="Giriş Yap" />
+    <small> Hesabınız yok mu? <a asp-action="Register" class="btn btn-link">Kayıt Ol</a></small>
 </form>
+
 </body>
 </html>

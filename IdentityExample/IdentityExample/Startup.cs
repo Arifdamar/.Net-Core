@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using IdentityExample.Context;
+using IdentityExample.CustomValidator;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -18,7 +19,31 @@ namespace IdentityExample
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddDbContext<IdentityContext>();
-            services.AddIdentity<AppUser, AppRole>().AddEntityFrameworkStores<IdentityContext>();
+            services.AddIdentity<AppUser, AppRole>(opt =>
+            {
+                opt.Password.RequireDigit = false;
+                opt.Password.RequireLowercase = false;
+                opt.Password.RequiredLength = 1;
+                opt.Password.RequireNonAlphanumeric = false;
+                opt.Password.RequireUppercase = false;
+                opt.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(10);
+                opt.Lockout.MaxFailedAccessAttempts = 3;
+                //opt.SignIn.RequireConfirmedEmail = true;
+            }).AddErrorDescriber<CustomIdentityValidator>().AddPasswordValidator<CustomPasswordValidator>().AddEntityFrameworkStores<IdentityContext>();
+
+            services.ConfigureApplicationCookie(opt =>
+            {
+                opt.LoginPath = new PathString("/Home/Index");
+                opt.AccessDeniedPath = new PathString("/Home/AccessDenied");
+                opt.Cookie.HttpOnly = true;
+                opt.Cookie.Name = "UdemyCookie";
+                opt.Cookie.SameSite = SameSiteMode.Strict;
+                opt.Cookie.SecurePolicy = CookieSecurePolicy.SameAsRequest;
+                opt.ExpireTimeSpan = TimeSpan.FromDays(20);
+            });
+
+            services.AddAuthorization(opt => { opt.AddPolicy("FemalePolicy", cnf => { cnf.RequireClaim("gender", "female"); }); });
+
             services.AddControllersWithViews();
         }
 
@@ -29,11 +54,12 @@ namespace IdentityExample
             {
                 app.UseDeveloperExceptionPage();
             }
+            //ReturnUrl=%2FPanel
 
             app.UseRouting();
-
             app.UseStaticFiles();
-
+            app.UseAuthentication();
+            app.UseAuthorization();
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapDefaultControllerRoute();

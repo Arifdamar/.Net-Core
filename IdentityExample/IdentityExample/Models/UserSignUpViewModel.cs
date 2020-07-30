@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace IdentityExample.Models
 {
-    public class UserRegisterViewModel
+    public class UserSignUpViewModel
     {
         [Display(Name = "Kullanıcı Adı:")]
         [Required(ErrorMessage = "Kullanıcı adı boş geçilemez")]

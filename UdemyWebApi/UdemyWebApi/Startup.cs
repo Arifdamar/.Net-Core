@@ -28,6 +28,14 @@ namespace UdemyWebApi
         {
             services.AddScoped<IUserService, UserManager>();
 
+            services.AddCors(cors =>
+            {
+                cors.AddPolicy("arifdamarPolicy", policy =>
+                {
+                    policy.WithOrigins("https://arifdamar.com").AllowAnyHeader().AllowAnyMethod();
+                });
+            });
+
             services.AddControllers()
                 .AddNewtonsoftJson(opt =>
                 {
@@ -46,6 +54,7 @@ namespace UdemyWebApi
             app.UseRouting();
             app.UseStaticFiles();
             app.UseAuthorization();
+            app.UseCors("arifdamarPolicy");
 
             app.UseEndpoints(endpoints =>
             {

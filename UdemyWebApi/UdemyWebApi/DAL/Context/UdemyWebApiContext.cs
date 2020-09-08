@@ -16,5 +16,6 @@ namespace UdemyWebApi.DAL.Context
         }
 
         public DbSet<Category> Categories { get; set; }
+        public DbSet<Blog> Blogs { get; set; }
     }
 }

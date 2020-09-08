@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using UdemyWebApi.DAL.Context;
 using UdemyWebApi.DAL.Entities;
 
@@ -78,6 +79,22 @@ namespace UdemyWebApi.Controllers
             context.SaveChanges();
 
             return Created("", category);
+        }
+
+        [HttpGet("{id}/blogs")]
+        public IActionResult GetWithBlogsById(int id)
+        {
+            using var context = new UdemyWebApiContext();
+            var category = context.Categories.Find(id);
+
+            if (category == null)
+            {
+                return NotFound();
+            }
+
+            var categoryWithBlogs = context.Categories.Where(I => I.Id == id).Include(I => I.Blogs).ToList();
+
+            return Ok(categoryWithBlogs);
         }
     }
 }

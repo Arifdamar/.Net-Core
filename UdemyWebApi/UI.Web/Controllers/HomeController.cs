@@ -62,6 +62,39 @@ namespace UI.Web.Controllers
             return View(category);
         }
 
+        public async Task<IActionResult> Edit(int id)
+        {
+            var httpClient = new HttpClient();
+            var response = await httpClient.GetAsync(baseUrl + "api/categories/" + id);
+
+            if (response.IsSuccessStatusCode)
+            {
+                var jsonString = await response.Content.ReadAsStringAsync();
+                var category = JsonConvert.DeserializeObject<Category>(jsonString);
+
+                return View(category);
+            }
+
+            return RedirectToAction("Index");
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Edit(Category category)
+        {
+            var httpClient = new HttpClient();
+            StringContent content = new StringContent(JsonConvert.SerializeObject(category), Encoding.UTF8, "application/json");
+            var response = await httpClient.PutAsync(baseUrl + "api/categories", content);
+
+            if (response.IsSuccessStatusCode)
+            {
+                return RedirectToAction("Index");
+            }
+
+            ModelState.AddModelError("", "Bir Hata Oluştu");
+
+            return View(category);
+        }
+
         public IActionResult Privacy()
         {
             return View();

@@ -1,12 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.IO;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Text;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
@@ -93,6 +95,34 @@ namespace UI.Web.Controllers
             ModelState.AddModelError("", "Bir Hata Oluştu");
 
             return View(category);
+        }
+
+        public IActionResult Upload()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Upload(IFormFile file)
+        {
+            var stream = new MemoryStream();
+            await file.CopyToAsync(stream);
+            var bytes = stream.ToArray();
+            ByteArrayContent fileContent = new ByteArrayContent(bytes);
+            MultipartFormDataContent formData = new MultipartFormDataContent();
+            formData.Add(fileContent, "file", file.FileName);
+
+            var httpClient = new HttpClient();
+            var response = await httpClient.PostAsync(baseUrl + "api/categories/upload", formData);
+
+            if (response.IsSuccessStatusCode)
+            {
+                return RedirectToAction("Index");
+            }
+
+            ModelState.AddModelError("", "Bir Hata Oluştu");
+
+            return View(file);
         }
 
         public IActionResult Privacy()

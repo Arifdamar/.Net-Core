@@ -10,6 +10,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
+using UdemyWebApi.Services;
 
 namespace UdemyWebApi
 {
@@ -25,6 +26,8 @@ namespace UdemyWebApi
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddScoped<IUserService, UserManager>();
+
             services.AddControllers()
                 .AddNewtonsoftJson(opt =>
                 {
@@ -41,7 +44,7 @@ namespace UdemyWebApi
             }
 
             app.UseRouting();
-
+            app.UseStaticFiles();
             app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>

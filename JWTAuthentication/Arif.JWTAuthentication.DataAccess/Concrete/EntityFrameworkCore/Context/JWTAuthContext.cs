@@ -1,17 +1,18 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using Arif.JWTAuthentication.Entities.Concrete;
+﻿using Arif.JWTAuthentication.Entities.Concrete;
 using Microsoft.EntityFrameworkCore;
 
-namespace Arif.JWTAuthentication.DataAccess.Concrete.EntityFrameworkCore
+namespace Arif.JWTAuthentication.DataAccess.Concrete.EntityFrameworkCore.Context
 {
     public class JWTAuthContext : DbContext
     {
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             optionsBuilder.UseSqlServer("server=(localdb)\\ProjectsV13; database=JWTAuth; user id=sa; password=1;");
-            base.OnConfiguring(optionsBuilder);
+        }
+
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            modelBuilder.ApplyConfiguration()
         }
 
         public DbSet<AppUser> AppUsers { get; set; }

@@ -1,4 +1,5 @@
-﻿using Arif.JWTAuthentication.Entities.Concrete;
+﻿using Arif.JWTAuthentication.DataAccess.Concrete.EntityFrameworkCore.Mapping;
+using Arif.JWTAuthentication.Entities.Concrete;
 using Microsoft.EntityFrameworkCore;
 
 namespace Arif.JWTAuthentication.DataAccess.Concrete.EntityFrameworkCore.Context
@@ -12,7 +13,10 @@ namespace Arif.JWTAuthentication.DataAccess.Concrete.EntityFrameworkCore.Context
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.ApplyConfiguration()
+            modelBuilder.ApplyConfiguration(new AppUserMap());
+            modelBuilder.ApplyConfiguration(new AppRoleMap());
+            modelBuilder.ApplyConfiguration(new AppUserRoleMap());
+            modelBuilder.ApplyConfiguration(new ProductMap());
         }
 
         public DbSet<AppUser> AppUsers { get; set; }

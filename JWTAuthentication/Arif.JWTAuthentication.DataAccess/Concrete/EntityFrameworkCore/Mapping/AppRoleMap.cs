@@ -16,7 +16,7 @@ namespace Arif.JWTAuthentication.DataAccess.Concrete.EntityFrameworkCore.Mapping
 
             builder.Property(I => I.Name).IsRequired().HasMaxLength(100);
 
-            builder.HasMany(I => I.AppUserRoles).WithOne(I => I.AppRole).HasForeignKey(I => I.AppRoleId).OnDelete(DeleteBehavior.Cascade)
+            builder.HasMany(I => I.AppUserRoles).WithOne(I => I.AppRole).HasForeignKey(I => I.AppRoleId).OnDelete(DeleteBehavior.Cascade);
         }
     }
 }

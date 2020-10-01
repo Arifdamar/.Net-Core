@@ -1,10 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using Arif.JWTAuthentication.Entities.Interfaces;
 
 namespace Arif.JWTAuthentication.Entities.Concrete
 {
-    public class AppUserRole
+    public class AppUserRole : ITable
     {
         public int Id { get; set; }
 

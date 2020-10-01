@@ -3,7 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.30114.105
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Arif.JWTAuthentication.Entities", "Arif.JWTAuthentication.Entities\Arif.JWTAuthentication.Entities.csproj", "{CC6E9666-5C27-4AF8-9CA2-F3BA927DA5FB}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Arif.JWTAuthentication.Entities", "Arif.JWTAuthentication.Entities\Arif.JWTAuthentication.Entities.csproj", "{CC6E9666-5C27-4AF8-9CA2-F3BA927DA5FB}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Arif.JWTAuthentication.DataAccess", "Arif.JWTAuthentication.DataAccess\Arif.JWTAuthentication.DataAccess.csproj", "{2615C090-F76D-43A2-919E-17EC74CA55B0}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,6 +17,10 @@ Global
 		{CC6E9666-5C27-4AF8-9CA2-F3BA927DA5FB}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{CC6E9666-5C27-4AF8-9CA2-F3BA927DA5FB}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{CC6E9666-5C27-4AF8-9CA2-F3BA927DA5FB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2615C090-F76D-43A2-919E-17EC74CA55B0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2615C090-F76D-43A2-919E-17EC74CA55B0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2615C090-F76D-43A2-919E-17EC74CA55B0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2615C090-F76D-43A2-919E-17EC74CA55B0}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -5,9 +5,9 @@ VisualStudioVersion = 16.0.30114.105
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Arif.JWTAuthentication.Entities", "Arif.JWTAuthentication.Entities\Arif.JWTAuthentication.Entities.csproj", "{CC6E9666-5C27-4AF8-9CA2-F3BA927DA5FB}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Arif.JWTAuthentication.DataAccess", "Arif.JWTAuthentication.DataAccess\Arif.JWTAuthentication.DataAccess.csproj", "{2615C090-F76D-43A2-919E-17EC74CA55B0}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Arif.JWTAuthentication.DataAccess", "Arif.JWTAuthentication.DataAccess\Arif.JWTAuthentication.DataAccess.csproj", "{2615C090-F76D-43A2-919E-17EC74CA55B0}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Arif.JWTAuthentication.Business", "Arif.JWTAuthentication.Business\Arif.JWTAuthentication.Business.csproj", "{B362FBCA-86C6-4601-A207-25BB57777414}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Arif.JWTAuthentication.Business", "Arif.JWTAuthentication.Business\Arif.JWTAuthentication.Business.csproj", "{B362FBCA-86C6-4601-A207-25BB57777414}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

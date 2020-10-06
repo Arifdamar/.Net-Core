@@ -14,49 +14,49 @@ namespace Arif.JWTAuthentication.DataAccess.Concrete.EntityFrameworkCore.Reposit
     public class EfGenericRepository<TEntity> : IGenericDal<TEntity> where TEntity : class, ITable, new()
     {
 
-        public async Task<List<TEntity>> GetAll()
+        public async Task<List<TEntity>> GetAllAsync()
         {
             await using var context = new JWTAuthContext();
 
             return await context.Set<TEntity>().ToListAsync();
         }
 
-        public async Task<List<TEntity>> GetAllByFilter(Expression<Func<TEntity, bool>> filter)
+        public async Task<List<TEntity>> GetAllByFilterAsync(Expression<Func<TEntity, bool>> filter)
         {
             await using var context = new JWTAuthContext();
 
             return await context.Set<TEntity>().Where(filter).ToListAsync();
         }
 
-        public async Task<TEntity> GetById(int id)
+        public async Task<TEntity> GetByIdAsync(int id)
         {
             await using var context = new JWTAuthContext();
 
             return await context.Set<TEntity>().FindAsync(id);
         }
 
-        public async Task<TEntity> GetByFilter(Expression<Func<TEntity, bool>> filter)
+        public async Task<TEntity> GetByFilterAsync(Expression<Func<TEntity, bool>> filter)
         {
             await using var context = new JWTAuthContext();
 
             return await context.Set<TEntity>().FirstOrDefaultAsync(filter);
         }
 
-        public async Task Add(TEntity entity)
+        public async Task AddAsync(TEntity entity)
         {
             await using var context = new JWTAuthContext();
             context.Add(entity);
             await context.SaveChangesAsync();
         }
 
-        public async Task Update(TEntity entity)
+        public async Task UpdateAsync(TEntity entity)
         {
             await using var context = new JWTAuthContext();
             context.Update(entity);
             await context.SaveChangesAsync();
         }
 
-        public async Task Remove(TEntity entity)
+        public async Task RemoveAsync(TEntity entity)
         {
             await using var context = new JWTAuthContext();
             context.Remove(entity);

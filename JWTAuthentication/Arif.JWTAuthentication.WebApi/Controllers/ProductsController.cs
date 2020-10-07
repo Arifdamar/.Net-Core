@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Arif.JWTAuthentication.Business.Interfaces;
 using Arif.JWTAuthentication.Entities.Concrete;
 using Arif.JWTAuthentication.Entities.Dtos.ProductDtos;
+using Arif.JWTAuthentication.WebApi.CustomFilters;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -43,16 +44,12 @@ namespace Arif.JWTAuthentication.WebApi.Controllers
         }
 
         [HttpPost]
+        [ValidModel]
         public async Task<IActionResult> Add(ProductAddDto productAddDto)
         {
-            if (ModelState.IsValid)
-            {
-                await _productService.AddAsync(new Product() { Name = productAddDto.Name });
+            await _productService.AddAsync(new Product() { Name = productAddDto.Name });
 
-                return Created("", productAddDto);
-            }
-
-            return BadRequest(productAddDto);
+            return Created("", productAddDto);
         }
 
         [HttpPut]

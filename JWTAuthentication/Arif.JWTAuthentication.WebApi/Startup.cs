@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Arif.JWTAuthentication.Business.Consts;
 using Arif.JWTAuthentication.Business.DependencyResolvers.MicrosoftIoc;
 using Arif.JWTAuthentication.WebApi.CustomFilters;
 using Arif.JWTAuthentication.WebApi.Mapping.AutoMapperProfile;
@@ -40,11 +41,12 @@ namespace Arif.JWTAuthentication.WebApi
                 opt.RequireHttpsMetadata = false;
                 opt.TokenValidationParameters = new TokenValidationParameters()
                 {
-                    ValidIssuer = "http://localhost",
-                    ValidAudience = "http://localhost",
-                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("arifarifarifarif1")),
+                    ValidIssuer = JwtInfo.Issuer,
+                    ValidAudience = JwtInfo.Audience,
+                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(JwtInfo.SecurityKey)),
                     ValidateIssuerSigningKey = true,
-                    ValidateLifetime = true
+                    ValidateLifetime = true,
+                    ClockSkew = TimeSpan.Zero
                 };
             });
             services.AddControllers().AddFluentValidation();

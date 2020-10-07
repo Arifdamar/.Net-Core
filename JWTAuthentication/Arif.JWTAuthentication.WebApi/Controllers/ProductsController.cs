@@ -7,6 +7,7 @@ using Arif.JWTAuthentication.Entities.Concrete;
 using Arif.JWTAuthentication.Entities.Dtos.ProductDtos;
 using Arif.JWTAuthentication.WebApi.CustomFilters;
 using AutoMapper;
+using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -67,6 +68,14 @@ namespace Arif.JWTAuthentication.WebApi.Controllers
             await _productService.RemoveAsync(await _productService.GetByIdAsync(id));
 
             return NoContent();
+        }
+
+        [Route("/Error")]
+        public IActionResult Error()
+        {
+            var errorInfo = HttpContext.Features.Get<IExceptionHandlerPathFeature>();
+            // logging
+            return Problem(detail: "An error occured");
         }
     }
 }

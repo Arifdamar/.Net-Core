@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Arif.JWTAuthentication.Business.DependencyResolvers.MicrosoftIoc;
+using Arif.JWTAuthentication.WebApi.CustomFilters;
 using FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -27,6 +28,7 @@ namespace Arif.JWTAuthentication.WebApi
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddDependencies();
+            services.AddScoped(typeof(ValidId<>));
             services.AddControllers().AddFluentValidation();
         }
 

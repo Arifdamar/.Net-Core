@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Arif.JWTAuthentication.Business.Interfaces;
 using Arif.JWTAuthentication.Entities.Concrete;
+using Arif.JWTAuthentication.Entities.Dtos.ProductDtos;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -42,11 +43,16 @@ namespace Arif.JWTAuthentication.WebApi.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Add(Product product)
+        public async Task<IActionResult> Add(ProductAddDto productAddDto)
         {
-            await _productService.AddAsync(product);
+            if (ModelState.IsValid)
+            {
+                await _productService.AddAsync(new Product() { Name = productAddDto.Name });
 
-            return Created("", product);
+                return Created("", productAddDto);
+            }
+
+            return BadRequest(productAddDto);
         }
 
         [HttpPut]

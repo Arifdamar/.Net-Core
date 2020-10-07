@@ -4,6 +4,8 @@ using System.Linq;
 using System.Threading.Tasks;
 using Arif.JWTAuthentication.Business.DependencyResolvers.MicrosoftIoc;
 using Arif.JWTAuthentication.WebApi.CustomFilters;
+using Arif.JWTAuthentication.WebApi.Mapping.AutoMapperProfile;
+using AutoMapper;
 using FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;

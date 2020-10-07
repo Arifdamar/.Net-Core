@@ -6,6 +6,7 @@ using Arif.JWTAuthentication.Business.Interfaces;
 using Arif.JWTAuthentication.Entities.Concrete;
 using Arif.JWTAuthentication.Entities.Dtos.ProductDtos;
 using Arif.JWTAuthentication.WebApi.CustomFilters;
+using AutoMapper;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -16,10 +17,12 @@ namespace Arif.JWTAuthentication.WebApi.Controllers
     public class ProductsController : ControllerBase
     {
         private readonly IProductService _productService;
+        private readonly IMapper _mapper;
 
-        public ProductsController(IProductService productService)
+        public ProductsController(IProductService productService, IMapper mapper)
         {
             _productService = productService;
+            _mapper = mapper;
         }
 
         [HttpGet]
@@ -43,16 +46,16 @@ namespace Arif.JWTAuthentication.WebApi.Controllers
         [ValidModel]
         public async Task<IActionResult> Add(ProductAddDto productAddDto)
         {
-            await _productService.AddAsync(new Product() { Name = productAddDto.Name });
+            await _productService.AddAsync(_mapper.Map<Product>(productAddDto));
 
             return Created("", productAddDto);
         }
 
         [HttpPut]
         [ValidModel]
-        public async Task<IActionResult> Update(Product product)
+        public async Task<IActionResult> Update(ProductUpdateDto productUpdateDto)
         {
-            await _productService.UpdateAsync(product);
+            await _productService.UpdateAsync(_mapper.Map<Product>(productUpdateDto));
 
             return NoContent();
         }

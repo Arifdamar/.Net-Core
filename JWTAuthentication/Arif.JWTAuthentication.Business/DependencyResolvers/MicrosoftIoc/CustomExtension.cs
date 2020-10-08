@@ -37,6 +37,7 @@ namespace Arif.JWTAuthentication.Business.DependencyResolvers.MicrosoftIoc
             services.AddTransient<IValidator<ProductAddDto>, ProductAddDtoValidator>();
             services.AddTransient<IValidator<ProductUpdateDto>, ProductUpdateDtoValidator>();
             services.AddTransient<IValidator<AppUserLoginDto>, AppUserLoginDtoValidator>();
+            services.AddTransient<IValidator<AppUserRegisterDto>, AppUserRegisterDtoValidator>();
         }
     }
 }

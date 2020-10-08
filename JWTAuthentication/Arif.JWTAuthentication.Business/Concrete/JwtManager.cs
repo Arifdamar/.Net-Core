@@ -37,7 +37,7 @@ namespace Arif.JWTAuthentication.Business.Concrete
             claims.Add(new Claim(ClaimTypes.Name, user.UserName));
             claims.Add(new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()));
 
-            if (roles.Count > 0)
+            if (roles?.Count > 0)
             {
                 foreach (var role in roles)
                 {

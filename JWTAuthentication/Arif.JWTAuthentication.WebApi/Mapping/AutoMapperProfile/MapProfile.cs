@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Arif.JWTAuthentication.Entities.Concrete;
+using Arif.JWTAuthentication.Entities.Dtos.AppUserDtos;
 using Arif.JWTAuthentication.Entities.Dtos.ProductDtos;
 using AutoMapper;
 
@@ -14,6 +15,8 @@ namespace Arif.JWTAuthentication.WebApi.Mapping.AutoMapperProfile
         {
             CreateMap<ProductAddDto, Product>().ReverseMap();
             CreateMap<ProductUpdateDto, Product>().ReverseMap();
+
+            CreateMap<AppUserRegisterDto, AppUser>().ReverseMap();
         }
     }
 }

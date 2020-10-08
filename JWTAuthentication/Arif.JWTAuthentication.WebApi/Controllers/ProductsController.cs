@@ -47,6 +47,7 @@ namespace Arif.JWTAuthentication.WebApi.Controllers
         [ValidModel]
         public async Task<IActionResult> Add(ProductAddDto productAddDto)
         {
+            
             await _productService.AddAsync(_mapper.Map<Product>(productAddDto));
 
             return Created("", productAddDto);

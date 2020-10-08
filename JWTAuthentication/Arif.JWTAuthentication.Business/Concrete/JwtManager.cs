@@ -12,7 +12,7 @@ namespace Arif.JWTAuthentication.Business.Concrete
 {
     public class JwtManager : IJwtService
     {
-        public string GenerateJwtToken(AppUser user, List<AppRole> roles)
+        public string GenerateJwt(AppUser user, List<AppRole> roles)
         {
             SymmetricSecurityKey symmetricSecurityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(JwtInfo.SecurityKey));
             SigningCredentials signingCredentials = new SigningCredentials(symmetricSecurityKey, SecurityAlgorithms.HmacSha256);

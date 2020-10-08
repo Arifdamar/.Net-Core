@@ -7,6 +7,6 @@ namespace Arif.JWTAuthentication.Business.Interfaces
 {
     public interface IJwtService
     {
-        string GenerateJwtToken(AppUser user, List<AppRole> roles);
+        string GenerateJwt(AppUser user, List<AppRole> roles);
     }
 }

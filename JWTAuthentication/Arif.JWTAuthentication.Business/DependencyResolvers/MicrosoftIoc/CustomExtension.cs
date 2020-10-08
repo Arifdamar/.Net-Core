@@ -6,6 +6,7 @@ using Arif.JWTAuthentication.Business.Interfaces;
 using Arif.JWTAuthentication.Business.ValidationRules.FluentValidation;
 using Arif.JWTAuthentication.DataAccess.Concrete.EntityFrameworkCore.Repositories;
 using Arif.JWTAuthentication.DataAccess.Interfaces;
+using Arif.JWTAuthentication.Entities.Dtos.AppUserDtos;
 using Arif.JWTAuthentication.Entities.Dtos.ProductDtos;
 using FluentValidation;
 using Microsoft.Extensions.DependencyInjection;
@@ -31,8 +32,11 @@ namespace Arif.JWTAuthentication.Business.DependencyResolvers.MicrosoftIoc
             services.AddScoped<IAppUserRoleDal, EfAppUserRoleRepository>();
             services.AddScoped<IAppUserRoleService, AppUserRoleManager>();
 
+            services.AddScoped<IJwtService, JwtManager>();
+
             services.AddTransient<IValidator<ProductAddDto>, ProductAddDtoValidator>();
             services.AddTransient<IValidator<ProductUpdateDto>, ProductUpdateDtoValidator>();
+            services.AddTransient<IValidator<AppUserLoginDto>, AppUserLoginDtoValidator>();
         }
     }
 }

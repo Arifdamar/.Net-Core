@@ -1,28 +1,32 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using Arif.JWTAuthentication.Business.Interfaces;
 using Arif.JWTAuthentication.DataAccess.Interfaces;
 using Arif.JWTAuthentication.Entities.Concrete;
+using Arif.JWTAuthentication.Entities.Dtos.AppUserDtos;
 
 namespace Arif.JWTAuthentication.Business.Concrete
 {
     public class AppUserManager : GenericManager<AppUser>, IAppUserService
     {
-        public AppUserManager(IGenericDal<AppUser> genericDal) : base(genericDal)
-        {
+        private readonly IAppUserDal _appUserDal;
 
+        public AppUserManager(IGenericDal<AppUser> genericDal, IAppUserDal appUserDal) : base(genericDal)
+        {
+            _appUserDal = appUserDal;
         }
 
-        public Task<AppUser> FindByUserName(string userName)
+        public async Task<AppUser> FindByUserName(string userName)
         {
-            throw new NotImplementedException();
+            var appUser = await _appUserDal.GetByFilterAsync(I => I.UserName == userName);
+
+            return appUser;
         }
 
-        public Task<bool> CheckPassword(string userName, string password)
+        public async Task<bool> CheckPassword(AppUserLoginDto appUserLoginDto)
         {
-            throw new NotImplementedException();
+            var appUser = await _appUserDal.GetByFilterAsync(I => I.UserName == appUserLoginDto.UserName);
+
+            return appUser.Password == appUserLoginDto.Password;
         }
     }
 }

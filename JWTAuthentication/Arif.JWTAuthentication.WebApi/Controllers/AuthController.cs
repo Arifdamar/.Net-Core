@@ -1,11 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using Arif.JWTAuthentication.Business.Interfaces;
 using Arif.JWTAuthentication.Entities.Dtos.AppUserDtos;
 using Arif.JWTAuthentication.WebApi.CustomFilters;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Arif.JWTAuthentication.WebApi.Controllers
@@ -15,19 +11,33 @@ namespace Arif.JWTAuthentication.WebApi.Controllers
     public class AuthController : ControllerBase
     {
         private readonly IJwtService _jwtService;
+        private readonly IAppUserService _appUserService;
 
-        public AuthController(IJwtService jwtService)
+        public AuthController(IJwtService jwtService, IAppUserService appUserService)
         {
             _jwtService = jwtService;
+            _appUserService = appUserService;
         }
 
         [HttpGet("[action]")]
         [ValidModel]
-        public IActionResult SignIn(AppUserLoginDto appUserLoginDto)
+        public async Task<IActionResult> SignIn(AppUserLoginDto appUserLoginDto)
         {
-            
+            var appUser = await _appUserService.FindByUserName(appUserLoginDto.UserName);
 
-            return Created("", "");
+            if (appUser == null)
+            {
+                return BadRequest("Kullanıcı Adı Veya Şifre Hatalı");
+            }
+
+            if (await _appUserService.CheckPassword(appUserLoginDto))
+            {
+                var token = _jwtService.GenerateJwt(appUser, null);
+
+                return Created("", token);
+            }
+
+            return BadRequest("Kullanıcı Adı Veya Şifre Hatalı");
         }
     }
 }

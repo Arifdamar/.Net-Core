@@ -9,8 +9,8 @@ namespace Arif.JWTAuthentication.Business.Interfaces
 {
     public interface IAppUserService : IGenericService<AppUser>
     {
-        Task<AppUser> FindByUserName(string userName);
-        Task<bool> CheckPassword(AppUserLoginDto appUserLoginDto);
+        Task<AppUser> FindByUserNameAsync(string userName);
+        Task<bool> CheckPasswordAsync(AppUserLoginDto appUserLoginDto);
         Task<List<AppRole>> GetRolesByUserNameAsync(string userName);
     }
 }

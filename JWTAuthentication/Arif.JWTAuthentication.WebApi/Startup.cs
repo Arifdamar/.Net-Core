@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Arif.JWTAuthentication.Business.Consts;
 using Arif.JWTAuthentication.Business.DependencyResolvers.MicrosoftIoc;
+using Arif.JWTAuthentication.Business.Interfaces;
 using Arif.JWTAuthentication.WebApi.CustomFilters;
 using Arif.JWTAuthentication.WebApi.Mapping.AutoMapperProfile;
 using AutoMapper;
@@ -53,13 +54,16 @@ namespace Arif.JWTAuthentication.WebApi
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, IAppUserService appUserService, IAppUserRoleService appUserRoleService, IAppRoleService appRoleService)
         {
             //if (env.IsDevelopment())
             //{
             //    app.UseDeveloperExceptionPage();
             //}
             app.UseExceptionHandler("/Error");
+
+            // ReSharper disable once AsyncConverter.AsyncWait
+            JwtIdentityInitializer.SeedAsync(appUserService, appUserRoleService, appRoleService).Wait();
 
             app.UseRouting();
 

@@ -16,14 +16,14 @@ namespace Arif.JWTAuthentication.Business.Concrete
             _appUserDal = appUserDal;
         }
 
-        public async Task<AppUser> FindByUserName(string userName)
+        public async Task<AppUser> FindByUserNameAsync(string userName)
         {
             var appUser = await _appUserDal.GetByFilterAsync(I => I.UserName == userName);
 
             return appUser;
         }
 
-        public async Task<bool> CheckPassword(AppUserLoginDto appUserLoginDto)
+        public async Task<bool> CheckPasswordAsync(AppUserLoginDto appUserLoginDto)
         {
             var appUser = await _appUserDal.GetByFilterAsync(I => I.UserName == appUserLoginDto.UserName);
 

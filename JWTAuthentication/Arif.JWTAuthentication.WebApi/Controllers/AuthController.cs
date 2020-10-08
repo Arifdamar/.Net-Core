@@ -27,14 +27,14 @@ namespace Arif.JWTAuthentication.WebApi.Controllers
         [ValidModel]
         public async Task<IActionResult> SignIn(AppUserLoginDto appUserLoginDto)
         {
-            var appUser = await _appUserService.FindByUserName(appUserLoginDto.UserName);
+            var appUser = await _appUserService.FindByUserNameAsync(appUserLoginDto.UserName);
 
             if (appUser == null)
             {
                 return BadRequest("Kullanıcı Adı Veya Şifre Hatalı");
             }
 
-            if (await _appUserService.CheckPassword(appUserLoginDto))
+            if (await _appUserService.CheckPasswordAsync(appUserLoginDto))
             {
                 var roles = await _appUserService.GetRolesByUserNameAsync(appUserLoginDto.UserName);
                 var token = _jwtService.GenerateJwt(appUser, roles);
@@ -49,7 +49,7 @@ namespace Arif.JWTAuthentication.WebApi.Controllers
         [ValidModel]
         public async Task<IActionResult> Register(AppUserRegisterDto appUserRegisterDto)
         {
-            var appUser = await _appUserService.FindByUserName(appUserRegisterDto.UserName);
+            var appUser = await _appUserService.FindByUserNameAsync(appUserRegisterDto.UserName);
 
             if (appUser != null)
             {

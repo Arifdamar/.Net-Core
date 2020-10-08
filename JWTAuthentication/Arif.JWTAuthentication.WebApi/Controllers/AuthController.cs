@@ -32,7 +32,7 @@ namespace Arif.JWTAuthentication.WebApi.Controllers
 
             if (await _appUserService.CheckPassword(appUserLoginDto))
             {
-                var token = _jwtService.GenerateJwt(appUser, null);
+                var token = _jwtService.GenerateJwt(appUser, await _appUserService.GetRolesByUserNameAsync(appUserLoginDto.UserName));
 
                 return Created("", token);
             }

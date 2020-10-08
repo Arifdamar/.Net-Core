@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 using Arif.JWTAuthentication.Business.Interfaces;
 using Arif.JWTAuthentication.DataAccess.Interfaces;
 using Arif.JWTAuthentication.Entities.Concrete;
@@ -27,6 +28,11 @@ namespace Arif.JWTAuthentication.Business.Concrete
             var appUser = await _appUserDal.GetByFilterAsync(I => I.UserName == appUserLoginDto.UserName);
 
             return appUser.Password == appUserLoginDto.Password;
+        }
+
+        public async Task<List<AppRole>> GetRolesByUserNameAsync(string userName)
+        {
+            return await _appUserDal.GetRolesByUserNameAsync(userName);
         }
     }
 }

@@ -11,5 +11,6 @@ namespace Arif.JWTAuthentication.Business.Interfaces
     {
         Task<AppUser> FindByUserName(string userName);
         Task<bool> CheckPassword(AppUserLoginDto appUserLoginDto);
+        Task<List<AppRole>> GetRolesByUserNameAsync(string userName);
     }
 }

@@ -2,11 +2,13 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Arif.JWTAuthentication.Business.Consts;
 using Arif.JWTAuthentication.Business.Interfaces;
 using Arif.JWTAuthentication.Entities.Concrete;
 using Arif.JWTAuthentication.Entities.Dtos.ProductDtos;
 using Arif.JWTAuthentication.WebApi.CustomFilters;
 using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -27,6 +29,7 @@ namespace Arif.JWTAuthentication.WebApi.Controllers
         }
 
         [HttpGet]
+        [Authorize(Roles = RoleInfo.Admin + "," + RoleInfo.Member)]
         public async Task<IActionResult> GetAll()
         {
             var products = await _productService.GetAllAsync();
@@ -35,6 +38,7 @@ namespace Arif.JWTAuthentication.WebApi.Controllers
         }
 
         [HttpGet("{id}")]
+        [Authorize(Roles = RoleInfo.Admin + "," + RoleInfo.Member)]
         [ServiceFilter(typeof(ValidId<Product>))]
         public async Task<IActionResult> GetById(int id)
         {
@@ -44,6 +48,7 @@ namespace Arif.JWTAuthentication.WebApi.Controllers
         }
 
         [HttpPost]
+        [Authorize(Roles = RoleInfo.Admin)]
         [ValidModel]
         public async Task<IActionResult> Add(ProductAddDto productAddDto)
         {
@@ -54,6 +59,7 @@ namespace Arif.JWTAuthentication.WebApi.Controllers
         }
 
         [HttpPut]
+        [Authorize(Roles = RoleInfo.Admin)]
         [ValidModel]
         public async Task<IActionResult> Update(ProductUpdateDto productUpdateDto)
         {
@@ -63,6 +69,7 @@ namespace Arif.JWTAuthentication.WebApi.Controllers
         }
 
         [HttpDelete("{id}")]
+        [Authorize(Roles = RoleInfo.Admin)]
         [ServiceFilter(typeof(ValidId<Product>))]
         public async Task<IActionResult> Delete(int id)
         {

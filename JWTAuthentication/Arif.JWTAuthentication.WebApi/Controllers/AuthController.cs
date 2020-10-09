@@ -1,4 +1,5 @@
 ﻿using System.Threading.Tasks;
+using Arif.JWTAuthentication.Business.Consts;
 using Arif.JWTAuthentication.Business.Interfaces;
 using Arif.JWTAuthentication.Entities.Concrete;
 using Arif.JWTAuthentication.Entities.Dtos.AppUserDtos;
@@ -47,7 +48,7 @@ namespace Arif.JWTAuthentication.WebApi.Controllers
 
         [HttpPost("[action]")]
         [ValidModel]
-        public async Task<IActionResult> Register(AppUserRegisterDto appUserRegisterDto)
+        public async Task<IActionResult> Register(AppUserRegisterDto appUserRegisterDto, [FromServices] IAppUserRoleService appUserRoleService, [FromServices] IAppRoleService appRoleService)
         {
             var appUser = await _appUserService.FindByUserNameAsync(appUserRegisterDto.UserName);
 
@@ -57,6 +58,13 @@ namespace Arif.JWTAuthentication.WebApi.Controllers
             }
 
             await _appUserService.AddAsync(_mapper.Map<AppUser>(appUserRegisterDto));
+            var user = await _appUserService.FindByUserNameAsync(appUserRegisterDto.UserName);
+            var role = await appRoleService.FindByNameAsync(RoleInfo.Member);
+            await appUserRoleService.AddAsync(new AppUserRole()
+            {
+                AppUserId = user.Id,
+                AppRoleId = role.Id
+            });
 
             return Created("", appUserRegisterDto);
         }

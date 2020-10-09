@@ -1,10 +1,13 @@
-﻿using System.Threading.Tasks;
+﻿using System.Linq;
+using System.Threading.Tasks;
 using Arif.JWTAuthentication.Business.Consts;
 using Arif.JWTAuthentication.Business.Interfaces;
 using Arif.JWTAuthentication.Entities.Concrete;
 using Arif.JWTAuthentication.Entities.Dtos.AppUserDtos;
+using Arif.JWTAuthentication.Entities.Token;
 using Arif.JWTAuthentication.WebApi.CustomFilters;
 using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Arif.JWTAuthentication.WebApi.Controllers
@@ -24,7 +27,7 @@ namespace Arif.JWTAuthentication.WebApi.Controllers
             _mapper = mapper;
         }
 
-        [HttpGet("[action]")]
+        [HttpPost("[action]")]
         [ValidModel]
         public async Task<IActionResult> SignIn(AppUserLoginDto appUserLoginDto)
         {
@@ -39,8 +42,12 @@ namespace Arif.JWTAuthentication.WebApi.Controllers
             {
                 var roles = await _appUserService.GetRolesByUserNameAsync(appUserLoginDto.UserName);
                 var token = _jwtService.GenerateJwt(appUser, roles);
+                JwtAccessToken jwtAccessToken = new JwtAccessToken()
+                {
+                    Token = token
+                };
 
-                return Created("", token);
+                return Created("", jwtAccessToken);
             }
 
             return BadRequest("Kullanıcı Adı Veya Şifre Hatalı");
@@ -67,6 +74,23 @@ namespace Arif.JWTAuthentication.WebApi.Controllers
             });
 
             return Created("", appUserRegisterDto);
+        }
+
+        [HttpGet("[action]")]
+        [Authorize]
+        public async Task<IActionResult> ActiveUser()
+        {
+            var user = await _appUserService.FindByUserNameAsync(User.Identity.Name);
+            var roles = await _appUserService.GetRolesByUserNameAsync(user.UserName);
+
+            AppUserDto appUserDto = new AppUserDto()
+            {
+                FullName = user.FullName,
+                UserName = user.UserName,
+                Roles = roles.Select(I => I.Name).ToList()
+            };
+
+            return Ok(appUserDto);
         }
     }
 }

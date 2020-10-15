@@ -2,6 +2,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using JWTAuthentication_Front.ApiServices.Concrete;
+using JWTAuthentication_Front.ApiServices.Interfaces;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -16,6 +18,10 @@ namespace JWTAuthentication_Front
         // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddScoped<IProductApiService, ProductApiManager>();
+            services.AddScoped<IAuthService, AuthManager>();
+            services.AddHttpContextAccessor();
+            services.AddSession();
             services.AddControllersWithViews();
         }
 
@@ -28,6 +34,10 @@ namespace JWTAuthentication_Front
             }
 
             app.UseRouting();
+
+            app.UseSession();
+
+            app.UseStaticFiles();
 
             app.UseEndpoints(endpoints =>
             {
